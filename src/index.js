@@ -3,7 +3,6 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import multer from "multer";
-
 //IMPORTAR RUTAS
 import router from "./routes/index.routes.js";
 
@@ -19,7 +18,6 @@ app.use(upload.any());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
-
 // RUTAS
 app.use("/api/", router);
 
