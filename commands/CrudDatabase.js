@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 import path from "path";
 
 class CrudDatabase {
+  
   createController = (entity) => {
     const currentFilePath = fileURLToPath(import.meta.url);
     const currentDirectory = path.dirname(currentFilePath);
