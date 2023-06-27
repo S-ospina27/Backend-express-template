@@ -145,12 +145,12 @@ export default ${fullClasName};
         database: process.env.DATABASE_NAME,
         password: process.env.PASSWORD_DB,
       },
-      {
-        host: process.env.HOST_DB_PRISMA,
-        user: process.env.USER_DB_PRISMA,
-        database: process.env.DATABASE_NAME_PRISMA,
-        password: process.env.PASSWORD_DB_PRISMA,
-      },
+      // {
+      //   host: process.env.HOST_DB_PRISMA,
+      //   user: process.env.USER_DB_PRISMA,
+      //   database: process.env.DATABASE_NAME_PRISMA,
+      //   password: process.env.PASSWORD_DB_PRISMA,
+      // },
     ];
 
     connections.forEach(async (conn) => {
