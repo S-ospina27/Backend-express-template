@@ -50,11 +50,11 @@ class File {
           pattern: "solid",
           fgColor: { argb: "FFFAEBD7" },
         };
-        cellHeaders.font={
-          color:{argb:"FFFFFF"},
-          bold:true
+        cellHeaders.font = {
+          color: { argb: "FFFFFF" },
+          bold: true,
         };
-        
+
         cell.fill = {
           type: "pattern",
           pattern: "solid",
@@ -66,6 +66,23 @@ class File {
     workbook.xlsx.writeFile(filePath);
     return `http://127.0.0.1:8000/archivos1/${fullname}`;
   }
+
+  static async loadExcel(file) {
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.load(file[0].buffer);
+    // Obtener la primera hoja del libro
+    const worksheet = workbook.getWorksheet(1);
+    const excelData = [];
+    worksheet.eachRow((row, rowNumber) => {
+      if (2 < rowNumber) {
+        const filteredRowData = row.values.filter(
+          (value) => value !== null && value !== ""
+        );
+        excelData.push(filteredRowData);
+      }
+    });
+    return excelData;
+  }
 }
 
 export default File;
@@ -75,6 +92,7 @@ export default File;
 // File.upFile(req.files);
 // ----------------------------------
 // como utilizar metodo ExportExcel
+// ejemplo
 // const resultados = [
 //   { nombre: "Santiago", apellido: "Ospina" },
 //   { nombre: "Daniel", apellido: "Josefin" },
@@ -84,5 +102,9 @@ export default File;
 // pide como parametros los datos,los cabezeros y el nombre del archivo
 // const link= File.ExportExcel(datos,["Nombre", "Apellido"],"emily");
 //   res.json("../storage/" +link);
-
-//recordar para siempre
+//   -------------------------------------------------------
+// //como utilizar  loadExcel 
+//  const data = await File.loadExcel(req.files);
+//    await connection.query(`INSERT INTO users (users_name,users_password) VALUES?; `, [data])
+//   return  res.send("Sera este el fin del hombre araña ?");
+  
