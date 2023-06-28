@@ -21,6 +21,9 @@ class File {
     const currentFilePath = fileURLToPath(import.meta.url);
     const currentDirectory = path.dirname(currentFilePath);
     const storageFolder = path.join(currentDirectory, "../storage/");
+    if (!fs.existsSync(storageFolder)) {
+      fs.mkdirSync(storageFolder);
+    }
     const fullname = `${name}.xlsx`;
     const filePath = path.join(storageFolder, fullname);
     const workbook = new ExcelJS.Workbook();
@@ -47,6 +50,11 @@ class File {
           pattern: "solid",
           fgColor: { argb: "FFFAEBD7" },
         };
+        cellHeaders.font={
+          color:{argb:"FFFFFF"},
+          bold:true
+        };
+        
         cell.fill = {
           type: "pattern",
           pattern: "solid",

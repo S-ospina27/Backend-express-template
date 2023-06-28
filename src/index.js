@@ -29,7 +29,6 @@ app.get("/archivos1/:archivo", (req, res)=>{
   const currentFilePath = fileURLToPath(import.meta.url);
   const currentDirectory = path.dirname(currentFilePath);
   res.sendFile(path.join(currentDirectory, `./storage/${archivo}`));
-  // res.sendFile(path.join(__dirname, `./storage/${archivo}`))
 });
 
 // ROUTER INDEX
