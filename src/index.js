@@ -3,6 +3,9 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import multer from "multer";
+import { fileURLToPath } from "url";
+import path from "path";
+
 //IMPORTAR RUTAS
 import router from "./routes/index.routes.js";
 
@@ -21,10 +24,19 @@ app.use(cors());
 // RUTAS
 app.use("/api/", router);
 
+app.get("/archivos1/:archivo", (req, res)=>{
+  const { archivo } = req.params
+  const currentFilePath = fileURLToPath(import.meta.url);
+  const currentDirectory = path.dirname(currentFilePath);
+  res.sendFile(path.join(currentDirectory, `./storage/${archivo}`));
+  // res.sendFile(path.join(__dirname, `./storage/${archivo}`))
+});
+
 // ROUTER INDEX
 app.use("/", (req, res) => {
   res.json({ message: "Welcome to index" });
 });
+
 
 // PUERTO DEL SERVIDOR LOCAL
 app.set("port", process.env.PORT || 3000);

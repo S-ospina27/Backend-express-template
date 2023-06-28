@@ -43,7 +43,7 @@ class File {
     });
 
     workbook.xlsx.writeFile(filePath);
-    return fullname;
+    return  `http://127.0.0.1:8000/archivos1/${fullname}`;
   }
 }
 
