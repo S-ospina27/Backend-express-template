@@ -76,3 +76,5 @@ export default File;
 // pide como parametros los datos,los cabezeros y el nombre del archivo
 // const link= File.ExportExcel(datos,["Nombre", "Apellido"],"emily");
 //   res.json("../storage/" +link);
+
+//recordar para siempre
