@@ -5,6 +5,8 @@ import cors from "cors";
 import multer from "multer";
 import { fileURLToPath } from "url";
 import path from "path";
+//funciones globales 
+import {globalFuncMiddleware} from "./helpers/Response.js";
 
 //IMPORTAR RUTAS
 import router from "./routes/index.routes.js";
@@ -21,6 +23,8 @@ app.use(upload.any());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
+app.use(globalFuncMiddleware);
+
 // RUTAS
 app.use("/api/", router);
 
