@@ -36,6 +36,8 @@ app.get("/archivos1/:archivo", (req, res)=>{
 });
 
 // ROUTER INDEX
+
+
 app.use("/", (req, res) => {
   res.json({ message: "Welcome to index" });
 });
