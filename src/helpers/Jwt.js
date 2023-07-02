@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import "dotenv/config";
   class Jwt {
     static createJWT(datos) {
-      const timer = Date.now() + 60 * 1000 * 3;
+      const timer = Date.now() + 60 * 1000 * 1;
       return jwt.sign({ datos, exp: timer }, process.env.SECRET_KEY);
     }
 
