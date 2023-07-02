@@ -4,17 +4,24 @@ import path from "path";
 import ExcelJS from "exceljs";
 
 class File {
-  static upFile(files) {
-    const currentFilePath = fileURLToPath(import.meta.url);
-    const currentDirectory = path.dirname(currentFilePath);
-    const storageFolder = path.join(currentDirectory, "../storage/");
-    if (!fs.existsSync(storageFolder)) {
-      fs.mkdirSync(storageFolder);
+  static upFile(files,res) {
+    try {
+      if (!files || Object.keys(files).length === 0) {
+        return res.error("No se proporciono archivo");
+      }
+      const currentFilePath = fileURLToPath(import.meta.url);
+      const currentDirectory = path.dirname(currentFilePath);
+      const storageFolder = path.join(currentDirectory, "../storage/");
+      if (!fs.existsSync(storageFolder)) {
+        fs.mkdirSync(storageFolder);
+      }
+      const name = Date.now() + files[0].originalname.replace(/ /g, "_");
+      const filePath = path.join(storageFolder, name);
+      fs.writeFileSync(filePath, files[0].buffer);
+      return res.success("Archivo cargado correstamente",name);
+    } catch (error) {
+      return res.error("Error al cargar el archivo",error);
     }
-    const name = Date.now() + files[0].originalname.replace(/ /g, "_");
-    const filePath = path.join(storageFolder, name);
-    fs.writeFileSync(filePath, files[0].buffer);
-    return name;
   }
 
   static ExportExcel(datos, headers, name) {
@@ -103,8 +110,7 @@ export default File;
 // const link= File.ExportExcel(datos,["Nombre", "Apellido"],"emily");
 //   res.json("../storage/" +link);
 //   -------------------------------------------------------
-// //como utilizar  loadExcel 
+// //como utilizar  loadExcel
 //  const data = await File.loadExcel(req.files);
 //    await connection.query(`INSERT INTO users (users_name,users_password) VALUES?; `, [data])
 //   return  res.send("Sera este el fin del hombre araña ?");
-  
