@@ -5,7 +5,61 @@ import { fileURLToPath } from "url";
 import path from "path";
 
 class CrudDatabase {
-  
+  createClass(datos, nameClass) {
+    const currentFilePath = fileURLToPath(import.meta.url);
+    const currentDirectory = path.dirname(currentFilePath);
+    const defaultFolder = "../src/class";
+    const fullClasName = `${nameClass}`;
+    const filePath = path.join(
+      currentDirectory,
+      defaultFolder,
+      `${fullClasName}.js`
+    );
+
+    const methods = datos.map(
+      (attribute) => `
+    set${attribute.charAt(0).toUpperCase() + attribute.slice(1)}(${attribute}){
+        this.${attribute} = ${attribute};
+    }
+
+    get${attribute.charAt(0).toUpperCase() + attribute.slice(1)}(){
+        return this.${attribute};
+    }
+`
+    );
+
+    const fullclasMinuscula =
+      fullClasName.charAt(0).toLowerCase() + fullClasName.slice(1);
+    const FormFieldsMethod = `
+  static FormFields(datos){
+    const ${fullclasMinuscula} = new ${fullClasName}();
+    ${datos
+      .map(
+        (attribute) =>
+          `${fullclasMinuscula}.set${
+            attribute.charAt(0).toUpperCase() + attribute.slice(1)
+          }([null,undefined].includes(datos.${attribute}) ? null : datos.${attribute});`
+      )
+      .join("\n")}
+    return ${fullclasMinuscula};
+  }
+`;
+
+    const CreationClass = `
+     class ${fullClasName}{
+        constructor(){
+          ${datos.map((attribute) => `this.${attribute} = null;`).join("\n")}
+        }
+      
+        ${methods.join("\n")}
+        ${FormFieldsMethod}
+       
+     }
+     export default ${fullClasName}
+     `;
+
+    fs.writeFileSync(filePath, CreationClass);
+  }
   createController = (entity) => {
     const currentFilePath = fileURLToPath(import.meta.url);
     const currentDirectory = path.dirname(currentFilePath);
@@ -160,7 +214,8 @@ export default ${fullClasName};
 
       try {
         const [query] = await connection.query(sql);
-        query.forEach((entity) => {
+
+        for (const entity of query) {
           const table = `Tables_in_${conn.database}`;
           let remove_hyphens_spaces = entity[table].replace(/[_-]/g, "");
           let words = remove_hyphens_spaces.split(" ");
@@ -168,10 +223,13 @@ export default ${fullClasName};
             (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
           );
           let namePascalCase = wordscapitalized.join("");
-
+          const describeSql = `DESCRIBE ${entity[table]}`;
+          const [tableDescription] = await connection.query(describeSql);
+          const columnNames = tableDescription.map((column) => column.Field);
+          this.createClass(columnNames, namePascalCase);
           this.createController(namePascalCase);
           this.createModel(namePascalCase);
-        });
+        }
         console.log(`Se ha creado la clase crud completo`);
       } catch (error) {
         console.log(error);

@@ -20,8 +20,16 @@ if (!className) {
   process.exit(1);
 }
 
+// Ruta absoluta del directorio (carpeta) a crear
+const folderPath = path.join(currentDirectory, defaultFolder);
+
+// Verifica si la carpeta existe, y si no, créala
+if (!fs.existsSync(folderPath)) {
+  fs.mkdirSync(folderPath, { recursive: true });
+}
+
 // Ruta absoluta del archivo a crear
-const filePath = path.join(currentDirectory, defaultFolder, `${className}.js`);
+const filePath = path.join(folderPath, `${className}.js`);
 
 // Contenido de la clase
 const classContent = `
@@ -64,7 +72,6 @@ class ${className} {
     };
 
 }
-
 
 export default ${className};
 `;

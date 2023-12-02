@@ -20,70 +20,26 @@ if (!className) {
   process.exit(1);
 }
 
+// Ruta absoluta del directorio (carpeta) a crear
+const folderPath = path.join(currentDirectory, defaultFolder);
+
+// Verifica si la carpeta existe, y si no, créala
+if (!fs.existsSync(folderPath)) {
+  fs.mkdirSync(folderPath, { recursive: true });
+}
+
 // Ruta absoluta del archivo a crear
-const filePath = path.join(currentDirectory, defaultFolder, `${className}.js`);
+const filePath = path.join(folderPath, `${className}.js`);
 
 // Contenido de la clase
 const classContent = `
 //import nombre from "../model/nombre.js";
 class ${className} {
- 
   constructor() {
     //this.nombre = new nombre();
   }
-
-  get${className} = async (req, res) => {
-    try {
-
-      return res.status(200).json({ message: "success"});
-    } catch (error) {
-      console.log(error);
-       return res.json({message:"Ocurrrio un error " + error});
-    }
-  };
-
-  post${className} = async (req, res) => {
-    try {
-      const data = await this.model.MethodModel(req.body);
-      if (data) {
-        return res.status(200).json({ message: "success", data });
-      }
-      return res.status(200).json({ message: "error" });
-    } catch (error) {
-      console.log(error);
-       return res.json({message:"Ocurrrio un error " + error});
-    }
-  };
-
-  put${className} = async (req, res) => {
-    try {
-      const data = await this.model.MethodModel(req.body);
-      if (data) {
-        return res.status(200).json({ message: "success", data });
-      }
-      return res.status(200).json({ message: "error" });
-    } catch (error) {
-      console.log(error);
-       return res.json({message:"Ocurrrio un error " + error});
-    }
-  };
-
-  delete${className} = async (req, res) => {
-    try {
-
-      const data = await this.model.MethodModel(req.body);
-      if (data) {
-        return res.status(200).json({ message: "success", data });
-      }
-      return res.status(200).json({ message: "error" });  
-    } catch (error) {
-      console.log(error);
-       return res.json({message:"Ocurrrio un error " + error});
-    }
-  };
-
+  // Resto del código...
 }
-
 
 export default ${className};
 `;
